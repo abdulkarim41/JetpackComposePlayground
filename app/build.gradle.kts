@@ -1,12 +1,7 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
-plugins {
 
+plugins {
     id("composeplayground.android.application")
     id("composeplayground.android.application.compose")
-
-    //alias(libs.plugins.com.android.application)
-    //alias(libs.plugins.org.jetbrains.kotlin.android)
-
 }
 
 android {
@@ -30,10 +25,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-    }
-
-    buildFeatures {
-        compose = true
     }
 
     composeOptions {

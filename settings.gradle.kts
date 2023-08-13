@@ -19,3 +19,5 @@ dependencyResolutionManagement {
 }
 
 include(":app")
+
+

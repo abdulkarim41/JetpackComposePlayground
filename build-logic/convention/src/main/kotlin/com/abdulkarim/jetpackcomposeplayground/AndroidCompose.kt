@@ -4,8 +4,6 @@ package com.abdulkarim.jetpackcomposeplayground
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.File
 
 internal fun Project.configureAndroidCompose(
@@ -15,9 +13,11 @@ internal fun Project.configureAndroidCompose(
         buildFeatures {
             compose = true
         }
-
         composeOptions {
             kotlinCompilerExtensionVersion = libs.findVersion("androidxComposeCompiler").get().toString()
+        }
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
         }
 
         dependencies {
@@ -26,19 +26,13 @@ internal fun Project.configureAndroidCompose(
             add("androidTestImplementation", platform(bom))
         }
     }
-
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-           freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
-        }
-    }
 }
 
 private fun Project.buildComposeMetricsParameters(): List<String> {
     val metricParameters = mutableListOf<String>()
     val enableMetricsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
-    val enableMetrics = (enableMetricsProvider.orNull == "true")
-    if (enableMetrics) {
+    val isEnableMetrics = (enableMetricsProvider.orNull == "true")
+    if (isEnableMetrics) {
         val metricsFolder = File(project.buildDir, "compose-metrics")
         metricParameters.add("-P")
         metricParameters.add(
@@ -47,8 +41,8 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     }
 
     val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
-    val enableReports = (enableReportsProvider.orNull == "true")
-    if (enableReports) {
+    val isEnableReports = (enableReportsProvider.orNull == "true")
+    if (isEnableReports) {
         val reportsFolder = File(project.buildDir, "compose-reports")
         metricParameters.add("-P")
         metricParameters.add(
