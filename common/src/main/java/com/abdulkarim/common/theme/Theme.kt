@@ -1,4 +1,4 @@
-package com.abdulkarim.jetpackcomposeplayground.ui.theme
+package com.abdulkarim.common.theme
 
 import android.app.Activity
 import android.os.Build
